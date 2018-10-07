@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PreparedLogger.DataAccess;
+using PreparedLogger.DataAccess.SqlServer;
 
 namespace PreparedLogger.Web
 {
@@ -27,9 +28,19 @@ namespace PreparedLogger.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<PreparedLoggerContext>(opt => opt.UseInMemoryDatabase("PreparedLogger"));
-            string connection = Configuration.GetConnectionString("PreparedLogger");
-            services.AddDbContext<PreparedLoggerContext>(options => options.UseSqlServer(connection));
+            string connectionString = Configuration.GetConnectionString("PreparedLogger");
+            switch (Configuration.GetValue<string>("DbType"))
+            {
+                case "sqlite":
+                    services.AddPreparedLoggerContext_Sqlite(connectionString);
+                    break;
+                case "sqlserver":
+                    services.AddPreparedLoggerContext_SqlServer(connectionString);
+                    break;
+                default:
+                    throw new Exception("Invalid or missing application configuration; must specify a valid DbType");
+            }
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

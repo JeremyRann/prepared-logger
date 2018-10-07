@@ -7,10 +7,13 @@ You'll need to copy appSettings.Development.json to appSettings.Local.json and m
 whatever config changes you want there first. To drop/recreate the DB with a new
 schema (stop the watch first):
 
-dotnet ef database drop
-dotnet ef migrations remove --project ../PreparedLogger.DataAccess/
-dotnet ef migrations add InitialCreate --project ../PreparedLogger.DataAccess/
-dotnet ef database update
+ASPNETCORE_ENVIRONMENT=Local dotnet ef database drop
+ASPNETCORE_ENVIRONMENT=Local dotnet ef migrations remove --project ../PreparedLogger.DataAccess.SqlServer/
+dotnet ef migrations add InitialCreate --project ../PreparedLogger.DataAccess.SqlServer/
+ASPNETCORE_ENVIRONMENT=Local dotnet ef database update
+
+Note that your local environment config will have to be configured for SQL Server. For
+Sqlite, use the appropriate project and change the environment to Development.
  */
 using System;
 using System.Collections.Generic;

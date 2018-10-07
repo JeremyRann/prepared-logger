@@ -12,14 +12,14 @@
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.4" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PreparedLogger.Models\PreparedLogger.Models.csproj" />
     <ProjectReference Include="..\PreparedLogger.DataAccess\PreparedLogger.DataAccess.csproj" />
+    <ProjectReference Include="..\PreparedLogger.DataAccess.SqlServer\PreparedLogger.DataAccess.SqlServer.csproj" />
+    <ProjectReference Include="..\PreparedLogger.DataAccess.Sqlite\PreparedLogger.DataAccess.Sqlite.csproj" />
   </ItemGroup>
 
 </Project>

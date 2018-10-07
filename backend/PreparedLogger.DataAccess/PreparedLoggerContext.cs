@@ -7,22 +7,16 @@ using PreparedLogger.Models;
 
 namespace PreparedLogger.DataAccess
 {
-    public class PreparedLoggerContext : DbContext
+    public abstract class PreparedLoggerContext : DbContext
     {
-        public PreparedLoggerContext(DbContextOptions<PreparedLoggerContext> options)
+        public PreparedLoggerContext(DbContextOptions options)
             : base(options)
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected void OnModelCreating_Base(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new LogConfig());
-
-            // https://github.com/aspnet/Announcements/issues/167#issue-146112393
-            foreach (var entity in modelBuilder.Model.GetEntityTypes())
-            {
-                entity.Relational().TableName = entity.DisplayName();
-            }
         }
 
         public DbSet<Log> Logs { get; set; }
