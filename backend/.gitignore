@@ -1,0 +1,4 @@
+bin/
+obj/
+PreparedLogger.Web/appSettings.Local.json
+
