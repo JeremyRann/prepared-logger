@@ -14,6 +14,11 @@ ASPNETCORE_ENVIRONMENT=Local dotnet ef database update
 
 Note that your local environment config will have to be configured for SQL Server. For
 Sqlite, use the appropriate project and change the environment to Development.
+
+Also note, all above commands assume you're on bash and setting environment variables per-command. You can
+set the command permanently in PowerShell using something like:
+
+$Env:ASPNETCORE_ENVIRONMENT="Local"
  */
 using System;
 using System.Collections.Generic;
