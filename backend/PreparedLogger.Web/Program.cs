@@ -3,7 +3,7 @@ To run the backend app, go to PreparedLogger.Web and run:
 
 ASPNETCORE_ENVIRONMENT=Local dotnet watch run
 
-You'll need to copy appSettings.Development.json to appSettings.Local.json and make
+You'll need to copy appsettings.Development.json to appsettings.Local.json and make
 whatever config changes you want there first. To drop/recreate the DB with a new
 schema (stop the watch first):
 
@@ -41,6 +41,10 @@ namespace PreparedLogger.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    //System.Console.WriteLine("Environment Name: " + hostingContext.HostingEnvironment.EnvironmentName);
+                })
                 .UseStartup<Startup>();
     }
 }

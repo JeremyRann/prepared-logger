@@ -30,6 +30,7 @@ namespace PreparedLogger.Web
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionString = Configuration.GetConnectionString("PreparedLogger");
+            //System.Console.WriteLine("Connection String: " + connectionString);
             switch (Configuration.GetValue<string>("DbType"))
             {
                 case "sqlite":
