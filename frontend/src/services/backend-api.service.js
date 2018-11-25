@@ -8,5 +8,9 @@ export default {
     async get (url) {
         url = "/api/" + url;
         return (await axios.get(url)).data;
+    },
+    async delete (url) {
+        url = "/api/" + url;
+        return (await axios.delete(url)).data;
     }
 };
