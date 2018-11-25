@@ -1,8 +1,9 @@
+const process = require("process");
 module.exports = {
     devServer: {
         proxy: {
             "/api": {
-                target: "https://localhost:5001",
+                target: process.env.API_LOCATION || "https://localhost:5001",
                 ws: true,
                 changeOrigin: true
             }

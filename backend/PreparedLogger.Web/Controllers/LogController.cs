@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PreparedLogger.DataAccess;
 using PreparedLogger.Models;
@@ -39,6 +40,19 @@ namespace PreparedLogger.Web.Controllers
             context.Logs.Add(log);
             context.SaveChanges();
             return log;
+        }
+
+        [HttpDelete("{logID}")]
+        public async Task<ActionResult> Delete(int logID)
+        {
+            Log log = context.Logs.SingleOrDefault(l => l.LogID == logID);
+            if (log == null)
+            {
+                return NotFound();
+            }
+            context.Logs.Remove(log);
+            await context.SaveChangesAsync();
+            return Ok();
         }
     }
 }
