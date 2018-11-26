@@ -19,7 +19,21 @@ Also note, all above commands assume you're on bash and setting environment vari
 set the command permanently in PowerShell using something like:
 
 $Env:ASPNETCORE_ENVIRONMENT="Local"
- */
+
+There's also some extra steps to monkey with listen urls. For the backend, I end up doing something like:
+
+$Env:ASPNETCORE_URLS="https://myip:5001"
+
+Then
+
+dotnet watch run --no-launch-profile
+
+Note the --no-launch-profile (see https://github.com/aspnet/AspNetCore/issues/4159)
+
+For the frontend, I'm doing things like:
+
+HOST=frontendip API_LOCATION="https://myip:5001" yarn run serve
+*/
 using System;
 using System.Collections.Generic;
 using System.IO;
