@@ -34,9 +34,11 @@ namespace PreparedLogger.Web
             switch (Configuration.GetValue<string>("DbType"))
             {
                 case "sqlite":
+                    //System.Console.WriteLine("Using SQLite");
                     services.AddPreparedLoggerContext_Sqlite(connectionString);
                     break;
                 case "sqlserver":
+                    //System.Console.WriteLine("Using MS SQL Server");
                     services.AddPreparedLoggerContext_SqlServer(connectionString);
                     break;
                 default:
@@ -53,16 +55,22 @@ namespace PreparedLogger.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
+            // I think env.IsDevelopment() is stupid; you have to use MS's assumed environment names, which
+            // I find restrictive (especially since I'm going to want to check appsettings.Development.json
+            // into source control). So I don't use it; I made my own IsLocal config variable to do this.
+            //if (env.IsDevelopment())
+            bool isLocal = Configuration.GetValue<bool?>("IsLocal").GetValueOrDefault(false);
+            //System.Console.WriteLine("IsLocal: " + isLocal);
+            if (isLocal)
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
                 app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
-            app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSwagger();
