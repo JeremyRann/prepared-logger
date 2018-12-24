@@ -1,7 +1,4 @@
-.vscode/
+PreparedLogger.Web/appsettings.Local.json
+PreparedLogger.Web/hostsettings.Local.json
 bin/
 obj/
-PreparedLogger.Web/appSettings.Local.json
-PreparedLogger.Web/hostingsettings.json
-PreparedLogger.Web/PreparedLogger.db
-

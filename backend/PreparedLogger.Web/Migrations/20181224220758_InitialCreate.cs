@@ -1,60 +1,58 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PreparedLogger.DataAccess.SqlServer.Migrations
+namespace PreparedLogger.Web.Migrations
 {
     public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Log",
+                name: "Logs",
                 columns: table => new
                 {
                     LogID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(maxLength: 255, nullable: true)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Log", x => x.LogID);
+                    table.PrimaryKey("PK_Logs", x => x.LogID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LogEntry",
+                name: "LogEntries",
                 columns: table => new
                 {
                     LogEntryID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     LogID = table.Column<int>(nullable: false),
-                    Message = table.Column<string>(nullable: true),
-                    Time = table.Column<DateTime>(nullable: false)
+                    Text = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LogEntry", x => x.LogEntryID);
+                    table.PrimaryKey("PK_LogEntries", x => x.LogEntryID);
                     table.ForeignKey(
-                        name: "FK_LogEntry_Log_LogID",
+                        name: "FK_LogEntries_Logs_LogID",
                         column: x => x.LogID,
-                        principalTable: "Log",
+                        principalTable: "Logs",
                         principalColumn: "LogID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_LogEntry_LogID",
-                table: "LogEntry",
+                name: "IX_LogEntries_LogID",
+                table: "LogEntries",
                 column: "LogID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "LogEntry");
+                name: "LogEntries");
 
             migrationBuilder.DropTable(
-                name: "Log");
+                name: "Logs");
         }
     }
 }
