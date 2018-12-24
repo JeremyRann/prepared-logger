@@ -1,26 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.4" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="3.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\PreparedLogger.Models\PreparedLogger.Models.csproj" />
-    <ProjectReference Include="..\PreparedLogger.DataAccess\PreparedLogger.DataAccess.csproj" />
-    <ProjectReference Include="..\PreparedLogger.DataAccess.SqlServer\PreparedLogger.DataAccess.SqlServer.csproj" />
-    <ProjectReference Include="..\PreparedLogger.DataAccess.Sqlite\PreparedLogger.DataAccess.Sqlite.csproj" />
+    <ProjectReference Include="..\PreparedLogger.Data\PreparedLogger.Data.csproj" />
   </ItemGroup>
 
 </Project>
