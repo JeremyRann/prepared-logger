@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PreparedLogger.Web.Migrations
+namespace PreparedLogger.Data.Migrations
 {
     public partial class InitialCreate : Migration
     {
@@ -13,7 +13,7 @@ namespace PreparedLogger.Web.Migrations
                 {
                     LogID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {

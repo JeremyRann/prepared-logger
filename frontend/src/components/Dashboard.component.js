@@ -12,13 +12,13 @@ export default {
     },
     async created () {
         await this.refresh();
-        // this.logs = await BackendApi.get("log");
+        // this.logs = await BackendApi.get("logs");
         // this.componentLoading = false;
     },
     methods: {
         async refresh () {
             this.componentLoading = true;
-            this.logs = await BackendApi.get("log");
+            this.logs = await BackendApi.get("logs");
             this.componentLoading = false;
         },
         async refresh_Click () {
@@ -30,7 +30,7 @@ export default {
         },
         async addLogSave_Click () {
             this.componentLoading = true;
-            await BackendApi.post("log", { name: this.newName });
+            await BackendApi.post("logs", { name: this.newName });
             this.addingLog = false;
             await this.refresh();
             this.componentLoading = false;
@@ -38,7 +38,7 @@ export default {
         async deleteLog_Click (logID) {
             if (confirm("Are you sure you want to delete this log?")) {
                 this.componentLoading = true;
-                await BackendApi.delete("log/" + logID.toString());
+                await BackendApi.delete("logs/" + logID.toString());
                 await this.refresh();
                 this.componentLoading = false;
             }

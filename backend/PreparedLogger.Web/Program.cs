@@ -1,7 +1,25 @@
-﻿/*
-To start the API project, press F5 in VS Code or run "dotnet watch run" from a command line.
+﻿/* To start the API project, press F5 in VS Code or run "dotnet watch run" from a command line.
 You can customize local settings with hostsettings.Local.json and appsettings.Local.json.
- */
+
+To create a database migration from scratch, remove existing migrations, navigate to
+PreparedLogger.Data, and run the following:
+
+dotnet ef migrations add InitialCreate --startup-project ../PreparedLogger.Web
+
+After changing a model, create a migration with:
+
+dotnet ef migrations add --startup-project ../PreparedLogger.Web
+
+Running migrations is a tad easier; from PreparedLogger.Web:
+
+dotnet ef database update
+
+And of course  you can remove with:
+
+dotnet ef database drop
+
+To run the frontend:
+HOST=frontendip API_LOCATION="https://myip:5001" yarn run serve */
 
 using System.IO;
 using Microsoft.AspNetCore;

@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PreparedLogger.Web;
+using PreparedLogger.Data;
 
-namespace PreparedLogger.Web.Migrations
+namespace PreparedLogger.Data.Migrations
 {
     [DbContext(typeof(PreparedLoggerContext))]
-    partial class PreparedLoggerContextModelSnapshot : ModelSnapshot
+    [Migration("20181230010237_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -18,20 +20,21 @@ namespace PreparedLogger.Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("PreparedLogger.Web.Log", b =>
+            modelBuilder.Entity("PreparedLogger.Data.Models.Log", b =>
                 {
                     b.Property<int>("LogID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(100);
 
                     b.HasKey("LogID");
 
                     b.ToTable("Logs");
                 });
 
-            modelBuilder.Entity("PreparedLogger.Web.LogEntry", b =>
+            modelBuilder.Entity("PreparedLogger.Data.Models.LogEntry", b =>
                 {
                     b.Property<int>("LogEntryID")
                         .ValueGeneratedOnAdd()
@@ -48,9 +51,9 @@ namespace PreparedLogger.Web.Migrations
                     b.ToTable("LogEntries");
                 });
 
-            modelBuilder.Entity("PreparedLogger.Web.LogEntry", b =>
+            modelBuilder.Entity("PreparedLogger.Data.Models.LogEntry", b =>
                 {
-                    b.HasOne("PreparedLogger.Web.Log")
+                    b.HasOne("PreparedLogger.Data.Models.Log")
                         .WithMany("LogEntries")
                         .HasForeignKey("LogID")
                         .OnDelete(DeleteBehavior.Cascade);
