@@ -1,3 +1,6 @@
+PreparedLogger.Auth.Web/appsettings.Local.json
+PreparedLogger.Auth.Web/hostsettings.Local.json
+PreparedLogger.Auth.Web/tempkey.rsa
 PreparedLogger.Web/appsettings.Local.json
 PreparedLogger.Web/hostsettings.Local.json
 bin/

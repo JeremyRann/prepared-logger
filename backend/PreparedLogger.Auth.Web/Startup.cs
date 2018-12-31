@@ -6,14 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using PreparedLogger.Data;
 
-namespace PreparedLogger.Web
+namespace PreparedLogger.Auth.Web
 {
     public class Startup
     {
@@ -29,19 +27,11 @@ namespace PreparedLogger.Web
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSingleton<IConfiguration>(Configuration);
-            services.AddDbContext<PreparedLoggerContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("default"),
-                    x => x.MigrationsAssembly("PreparedLogger.Data")));
-
-
-            services.AddAuthentication("Bearer")
-                .AddIdentityServerAuthentication(options =>
-                {
-                    options.Authority = "http://localhost:5001";
-                    options.RequireHttpsMetadata = false;
-
-                    options.ApiName = "PreparedLogger";
-                });
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients())
+                .AddTestUsers(Config.GetUsers().ToList());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,9 +47,9 @@ namespace PreparedLogger.Web
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
-            
-            app.UseAuthentication();
+
             app.UseMvc();
+            app.UseIdentityServer();
         }
     }
 }

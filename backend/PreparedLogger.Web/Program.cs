@@ -35,6 +35,8 @@ namespace PreparedLogger.Web
             CreateWebHostBuilder(args).Build().Run();
         }
 
+        // TODO: Consider merging auth and web projects into one using something like this:
+        // https://www.strathweb.com/2017/04/running-multiple-independent-asp-net-core-pipelines-side-by-side-in-the-same-application/
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(new ConfigurationBuilder()
