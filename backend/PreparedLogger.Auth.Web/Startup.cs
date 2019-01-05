@@ -50,9 +50,8 @@ namespace PreparedLogger.Auth.Web
             }
 
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
-
             app.UseIdentityServer();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
