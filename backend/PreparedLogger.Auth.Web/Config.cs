@@ -22,10 +22,7 @@ namespace PreparedLogger.Auth.Web
                 {
                     ClientId = "AdminConsole",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
+                    ClientSecrets = { new Secret("secret".Sha256()) },
                     AllowedScopes = { "PreparedLogger" }
                 },
                 // resource owner password grant client
@@ -33,10 +30,7 @@ namespace PreparedLogger.Auth.Web
                 {
                     ClientId = "ro.client",
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256())
-                    },
+                    ClientSecrets = { new Secret("secret".Sha256()) },
                     AllowedScopes = { "PreparedLogger" }
                 },
                 // OpenID Connect implicit flow client (MVC)
@@ -44,14 +38,18 @@ namespace PreparedLogger.Auth.Web
                 {
                     ClientId = "mvc",
                     ClientName = "MVC Client",
-                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowedGrantTypes = GrantTypes.Hybrid,
+                    ClientSecrets = { new Secret("secret".Sha256()) },
                     RedirectUris = { "http://localhost:5002/signin-oidc" },
                     PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
-                    AllowedScopes = new string[]
+                    AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
-                    }
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "PreparedLogger"
+                    },
+                    AllowOfflineAccess = true,
+                    RequireConsent = false
                 }
             };
         }
