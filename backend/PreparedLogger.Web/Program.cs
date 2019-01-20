@@ -1,5 +1,10 @@
 ﻿/* To start the API project, press F5 in VS Code or run "dotnet watch run" from a command line.
 You can customize local settings with hostsettings.Local.json and appsettings.Local.json.
+Example hostsettings.Local.json:
+
+{
+    "urls": "http://localhost:5000"
+}
 
 To create a database migration from scratch, remove existing migrations, navigate to
 PreparedLogger.Data, and run the following:

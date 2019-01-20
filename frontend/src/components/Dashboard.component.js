@@ -16,7 +16,7 @@ export default {
         // this.componentLoading = false;
     },
     methods: {
-        form_Submit() { },
+        form_Submit () { },
         async refresh () {
             this.componentLoading = true;
             this.logs = await BackendApi.get("logs");

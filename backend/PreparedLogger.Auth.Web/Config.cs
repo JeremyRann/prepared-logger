@@ -50,6 +50,26 @@ namespace PreparedLogger.Auth.Web
                     },
                     AllowOfflineAccess = true,
                     RequireConsent = false
+                },
+                // JavaScript Client
+                new Client
+                {
+                    ClientId = "js",
+                    ClientName = "JavaScript Client",
+                    AllowedGrantTypes = GrantTypes.Code,
+                    RequirePkce = true,
+                    RequireClientSecret = false,
+
+                    RedirectUris =           { "http://localhost:8080?callback" },
+                    PostLogoutRedirectUris = { "http://localhost:8080" },
+                    AllowedCorsOrigins =     { "http://localhost:8080" },
+
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "PreparedLogger"
+                    }
                 }
             };
         }
