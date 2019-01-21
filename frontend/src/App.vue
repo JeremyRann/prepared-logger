@@ -2,6 +2,7 @@
     <div id="app">
         <div id="nav">
             <router-link to="/">Home</router-link> |
+            <router-link to="/account">Account</router-link> |
             <span v-if="isLoggedIn === false" @click="login_Click">Log in</span>
             <span v-if="isLoggedIn === true" @click="logout_Click">Log out</span>
         </div>
@@ -11,8 +12,6 @@
 
 <script>
 import authService from "./services/auth.service";
-
-console.log(authService);
 
 export default {
     name: "App",

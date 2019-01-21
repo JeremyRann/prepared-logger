@@ -1,16 +1,28 @@
-const axios = require("axios");
+import authService from "./auth.service";
+import axios from "axios";
 
 export default {
+    async baseRequest () {
+        let requestObject = {
+            baseURL: "/api/",
+            headers: {}
+        };
+        if (!authService.isGuest()) {
+            let accessToken = await authService.getAccessToken();
+            requestObject.headers["Authorization"] = "Bearer " + accessToken;
+        }
+        return axios.create(requestObject);
+    },
     async post (url, data) {
-        url = "/api/" + url;
-        return (await axios.post(url, data)).data;
+        let request = await this.baseRequest();
+        return (await request.post(url, data)).data;
     },
     async get (url) {
-        url = "/api/" + url;
-        return (await axios.get(url)).data;
+        let request = await this.baseRequest();
+        return (await request.get(url)).data;
     },
     async delete (url) {
-        url = "/api/" + url;
-        return (await axios.delete(url)).data;
+        let request = await this.baseRequest();
+        return (await request.delete(url)).data;
     }
 };

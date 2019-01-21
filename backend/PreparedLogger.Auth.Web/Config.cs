@@ -59,8 +59,9 @@ namespace PreparedLogger.Auth.Web
                     AllowedGrantTypes = GrantTypes.Code,
                     RequirePkce = true,
                     RequireClientSecret = false,
+                    RequireConsent = false,
 
-                    RedirectUris =           { "http://localhost:8080?callback" },
+                    RedirectUris =           { "http://localhost:8080?redirect=fromIdentityProvider" },
                     PostLogoutRedirectUris = { "http://localhost:8080" },
                     AllowedCorsOrigins =     { "http://localhost:8080" },
 

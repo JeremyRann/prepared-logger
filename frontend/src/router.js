@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Dashboard from "./components/Dashboard.vue";
-import Login from "./components/login.vue";
+import Account from "./components/account.vue";
 
 Vue.use(Router);
 
@@ -13,9 +13,9 @@ export default new Router({
             component: Dashboard
         },
         {
-            path: "/login",
-            name: "login",
-            component: Login
+            path: "/account",
+            name: "account",
+            component: Account
         }
     ]
 });
