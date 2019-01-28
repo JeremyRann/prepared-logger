@@ -57,7 +57,9 @@ namespace PreparedLogger.Auth.Web
                     ClientId = "js",
                     ClientName = "JavaScript Client",
                     AllowedGrantTypes = GrantTypes.Code,
-                    RequirePkce = true,
+                    // I don't know why the IdentityServer4 docs have you use pkce; it doesn't make sense
+                    // for SPAs. The purpose is to prevent tampering on mobile and native applications.
+                    RequirePkce = false,
                     RequireClientSecret = false,
                     RequireConsent = false,
 
