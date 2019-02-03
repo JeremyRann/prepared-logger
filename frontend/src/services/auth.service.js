@@ -1,3 +1,54 @@
+/* This is a temporary space to keep some notes. I asked a Stack Overflow question here:
+https://stackoverflow.com/q/54497275/2850538
+
+I want OpenID Connect for authentication and sliding expiration where the user
+will never be taken off of the page in normal circumstances; in other words,
+I'm not willing to redirect on every access token expiration (which seems to be
+the norm). It appears I have three options:
+
+1. Don't use refresh tokens; issue short access tokens and use an iframe hack
+to silently re-request access tokens. This is an old method, but it appeals to
+me because under the hood it leverages http-only cookies, which I think we
+should be using. IDServer4 uses .net's built-in cookie auth, and there's great
+documentation on that here:
+https://docs.microsoft.com/en-us/aspnet/core/security/authentication/cookie?view=aspnetcore-2.2
+Generally though, this approach is described here:
+https://brockallen.com/2019/01/03/the-state-of-the-implicit-flow-in-oauth2/.
+There are probably other resources that go into more detail about how to do
+this.
+2. Use refresh tokens by calling ID server directly from the SPA. It's
+explicitly recommended against
+(https://tools.ietf.org/html/draft-parecki-oauth-browser-based-apps-02#section-8:
+Authorization servers SHOULD NOT issue refresh tokens to browser-based
+applications. So obviously I don't like this option, however there are ways to
+mitigate the danger. Ultimately, I feel XSS can never be ruled out with this
+option; you'd need an http-only cookie to ensure all the data you'd need to
+refresh isn't entirely in local storage, and I don't think there's really a way
+to do that since it's a CORS request. I had originally envisioned refreshing
+via the backend, but this appears to either not be possible or be
+sufficiently non-standard that I'd be unwilling to do it.
+3. Follow advice at
+https://leastprivilege.com/2019/01/18/an-alternative-way-to-secure-spas-with-asp-net-core-openid-connect-oauth-2-0-and-proxykit/,
+which I think basically involves using OpenID connect for initial authorization
+then delegating the rest of the process to the backend. I find it to be a
+cop-out in some ways, but if I were designing my own SSO flow, it'd probably
+look like this. It's still off the beaten path though, so again I'm not
+super-comfortable with it yet.
+
+Note that whatever approach is taken, I'll want to check a few things:
+1. I should be using a CSP as strict as possible
+2. I should ensure same-site cookies are used
+3. Obivously, all cookies should be http-only
+4. Probably I should be using PKCE; I hate it since I don't think it solves any
+problems I really have, but IETF appears to recommend it
+(https://tools.ietf.org/html/draft-parecki-oauth-browser-based-apps-02#section-4:
+For authorizing users within a browser-based application, the best
+current practice is to...Use the OAuth 2.0 authorization code flow with
+the PKCE extension. I'm not so confident in my understanding that I'm
+willing to drop that.
+5. External providers should still work (not sure if that's possible for all
+options).
+*/
 import oidc from "oidc-client";
 import Url from "url-parse";
 import axios from "axios";
@@ -12,21 +63,9 @@ let identitySettings = {
 };
 let userManager = new oidc.UserManager(identitySettings);
 let user = null;
-let accessToken = null;
+let authData = null;
 
-const useOidc = true;
-
-// let identityProviderConfigPromise = null;
-// async function getIdentityProviderConfig () {
-//     if (identityProviderConfigPromise === null) {
-//         identityProviderConfigPromise = new Promise(async resolve => {
-//             let request = axios.create({ baseURL: identitySettings.authority });
-//             resolve((await request.get("/.well-known/openid-configuration")).data);
-//         });
-//     }
-//
-//     return identityProviderConfigPromise;
-// };
+const useOidc = false;
 
 function makeParams (obj) {
     return Object.keys(obj).map(key => encodeURIComponent(key) + "=" + encodeURIComponent(obj[key])).join("&");
@@ -39,12 +78,10 @@ export default {
             return;
         }
 
-        // let idConfig = await getIdentityProviderConfig();
         let stateArr = [];
         // Add 64 hex characters together for a random 32-byte hex string
         for (let i = 0; i < 64; i++) { stateArr.push(Math.trunc(Math.random() * 16).toString(16)); }
         let state = stateArr.join("");
-        console.log(state);
 
         window.location.href = identitySettings["authority"] + "/connect/authorize?" + makeParams({
             "client_id": "js",
@@ -57,19 +94,29 @@ export default {
     async isLoggedIn () {
         if (useOidc) {
             let user = await userManager.getUser();
-            console.log(["user", user]);
             return !!user;
         }
-        return !!accessToken;
+        return !!authData;
     },
     isGuest () {
         if (useOidc) {
             return user === null;
         }
-        return accessToken === null;
+        return authData === null;
     },
     async logOut () {
-        await userManager.signoutRedirect();
+        if (useOidc) {
+            await userManager.signoutRedirect();
+            return;
+        }
+        delete sessionStorage["auth_data"];
+
+        window.location.href = identitySettings["authority"] + "/connect/endsession?" + makeParams({
+            "post_logout_redirect_uri": "http://localhost:8080",
+            "id_token_hint": authData.id_token
+        });
+
+        authData = null;
     },
     async getAccessToken () {
         if (useOidc) {
@@ -84,20 +131,18 @@ export default {
         }
         else {
             return new Promise(async resolve => {
-                if (accessToken === null) {
+                if (authData === null) {
                     await this.logIn();
                 }
                 else {
-                    resolve(accessToken);
+                    resolve(authData.access_token);
                 }
             });
         }
     },
     async initializeApp () {
-        console.log(Url);
         // Go back to the app if this is an ID provider redirect
         let url = new Url(window.location.href, true);
-        console.log(JSON.stringify(url, null, 4));
 
         if (useOidc) {
             if (url.query && url.query.redirect === "fromIdentityProvider") {
@@ -110,14 +155,6 @@ export default {
             return true;
         }
 
-        // http://localhost:5001/connect/token
-        // {
-        //     "client_id": "js",
-        //     "code": "9effbe8ebf62b0982fcd3b454c65d9c3efa7c1df4ee994a5aae93fd60dca27b2",
-        //     "redirect_uri": "http://localhost:8080?redirect=fromIdentityProvider",
-        //     "code_verifier": "aee9dc9ce0c343538e40778d458dd6363cb202313713445d9ecf3a7f15780a7ede6304cfb3f24fa5800a1a7baabec66a",
-        //     "grant_type": "authorization_code"
-        // }
         if (url.query && url.query.redirect === "fromIdentityProvider") {
             let request = axios.create({ baseURL: identitySettings.authority });
             let authResult = await request.post("/connect/token", makeParams({
@@ -126,12 +163,11 @@ export default {
                 "redirect_uri": identitySettings["redirect_uri"],
                 "grant_type": "authorization_code"
             }));
-            console.log(JSON.stringify(authResult.data, null, 4));
-            sessionStorage["access_token"] = authResult.data["access_token"];
+            sessionStorage["auth_data"] = JSON.stringify(authResult.data);
             window.location = "/";
             return false;
         }
-        accessToken = sessionStorage["access_token"] || null;
+        authData = (sessionStorage["auth_data"]) ? JSON.parse(sessionStorage["auth_data"]) : null;
         return true;
     }
 };
