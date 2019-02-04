@@ -3,7 +3,7 @@
         <h1>Account</h1>
         <p v-if="!isLoggedIn">User is not loged in</p>
         <div v-if="isLoggedIn">
-            <ul v-for="item in userData" :key="item.type">
+            <ul v-for="(item, index) in userData" :key="index">
                 <li>
                     <span>{{item.type}}</span>:
                     <span>{{item.value}}</span>

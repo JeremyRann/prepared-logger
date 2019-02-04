@@ -57,13 +57,12 @@ namespace PreparedLogger.Auth.Web
                     ClientId = "js",
                     ClientName = "JavaScript Client",
                     AllowedGrantTypes = GrantTypes.Code,
-                    // I don't know why the IdentityServer4 docs have you use pkce; it doesn't make sense
-                    // for SPAs. The purpose is to prevent tampering on mobile and native applications.
-                    RequirePkce = false,
+                    RequirePkce = true,
                     RequireClientSecret = false,
+                    AccessTokenLifetime = 90,
                     RequireConsent = false,
 
-                    RedirectUris =           { "http://localhost:8080?redirect=fromIdentityProvider" },
+                    RedirectUris =           { "http://localhost:8080?redirect=fromIdentityProvider", "http://localhost:8080/silent-refresh.html" },
                     PostLogoutRedirectUris = { "http://localhost:8080" },
                     AllowedCorsOrigins =     { "http://localhost:8080" },
 

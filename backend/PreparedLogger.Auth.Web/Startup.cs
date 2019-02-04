@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +34,12 @@ namespace PreparedLogger.Auth.Web
                 .AddInMemoryApiResources(Config.GetApiResources())
                 .AddInMemoryClients(Config.GetClients())
                 .AddTestUsers(Config.GetUsers().ToList());
+            services.AddAuthentication().AddGoogle("Google", options =>
+            {
+                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                options.ClientId = "220285106376-e57p0v1cppunoli84r1vijosbkvckqq7.apps.googleusercontent.com";
+                options.ClientSecret = "tseLi8TReWbU8KJr3tcvKvH2";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

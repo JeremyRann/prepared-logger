@@ -12,7 +12,6 @@ export default {
     },
     async created () {
         this.isLoggedIn = await authService.isLoggedIn();
-        console.log(this.isLoggedIn);
         if (this.isLoggedIn) {
             this.userData = await BackendApi.get("identity");
         }
