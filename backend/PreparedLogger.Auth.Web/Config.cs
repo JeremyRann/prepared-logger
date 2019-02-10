@@ -1,12 +1,24 @@
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
+
 using IdentityServer4;
 using IdentityServer4.Models;
-using IdentityServer4.Test;
+using System.Collections.Generic;
 
 namespace PreparedLogger.Auth.Web
 {
     public static class Config
     {
-        public static ApiResource[] GetApiResources()
+        public static IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new IdentityResource[]
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
+            };
+        }
+
+        public static IEnumerable<ApiResource> GetApis()
         {
             return new ApiResource[]
             {
@@ -14,7 +26,7 @@ namespace PreparedLogger.Auth.Web
             };
         }
 
-        public static Client[] GetClients()
+        public static IEnumerable<Client> GetClients()
         {
             return new Client[]
             {
@@ -73,34 +85,6 @@ namespace PreparedLogger.Auth.Web
                         "PreparedLogger"
                     }
                 }
-            };
-        }
-
-        public static TestUser[] GetUsers()
-        {
-            return new TestUser[]
-            {
-                new TestUser
-                {
-                    SubjectId = "1",
-                    Username = "alice",
-                    Password = "password"
-                },
-                new TestUser
-                {
-                    SubjectId = "2",
-                    Username = "bob",
-                    Password = "password"
-                }
-            };
-        }
-
-        public static IdentityResource[] GetIdentityResources()
-        {
-            return new IdentityResource[]
-            {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
             };
         }
     }

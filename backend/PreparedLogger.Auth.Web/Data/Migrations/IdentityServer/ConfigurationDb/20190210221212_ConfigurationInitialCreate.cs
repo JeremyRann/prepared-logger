@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PreparedLogger.Auth.Web.Data.Migrations.IdentityServer.ConfigurationDb
 {
-    public partial class InitialIdentityServerConfigurationDbMigration : Migration
+    public partial class ConfigurationInitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

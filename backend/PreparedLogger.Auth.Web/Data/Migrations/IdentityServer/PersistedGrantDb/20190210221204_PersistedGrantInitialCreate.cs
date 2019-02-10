@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PreparedLogger.Auth.Web.Data.Migrations.IdentityServer.PersistedGrantDb
 {
-    public partial class InitialIdentityServerPersistedGrantDbMigration : Migration
+    public partial class PersistedGrantInitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
